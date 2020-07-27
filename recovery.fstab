@@ -1,55 +1,60 @@
-# Copyright (c) 2018, The Linux Foundation. All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above
-#       copyright notice, this list of conditions and the following
-#       disclaimer in the documentation and/or other materials provided
-#       with the distribution.
-#     * Neither the name of The Linux Foundation nor the names of its
-#       contributors may be used to endorse or promote products derived
-#       from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 # Android fstab file.
 # The filesystem that contains the filesystem checker binary (typically /system) cannot
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
-#<src>                                                 <mnt_point>            <type>  <mnt_flags and options>                            <fs_mgr_flags>
-/dev/block/bootdevice/by-name/system                    /                      ext4    ro,barrier=1,discard                                 wait,slotselect,avb
-/dev/block/bootdevice/by-name/metadata                  /metadata              ext4    noatime,nosuid,nodev,discard                         wait,formattable
-/dev/block/bootdevice/by-name/userdata                  /data                  ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc,discard latemount,wait,check,fileencryption=ice,keydirectory=/metadata/vold/metadata_encryption,quota,reservedsize=512M
-/dev/block/bootdevice/by-name/userdata                   /data                 f2fs    noatime,nosuid,nodev,discard,fsync_mode=nobarrier latemount,wait,check,fileencryption=ice,keydirectory=/metadata/vold/metadata_encryption,quota,formattable,reservedsize=128M
-#/dev/block/bootdevice/by-name/userdata                  /data                  ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc,discard latemount,wait,check,fileencryption=ice,wrappedkey,keydirectory=/metadata/vold/metadata_encryption,quota,reservedsize=128M
-/dev/block/bootdevice/by-name/persist                   /mnt/vendor/persist    ext4    noatime,nosuid,nodev,barrier=1                       wait
+# Currently we dont have e2fsck compiled. So fs check would failed.
 
-/dev/block/bootdevice/by-name/modem                     /vendor/firmware_mnt   vfat    ro,shortname=lower,uid=0,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0 wait,slotselect
-/dev/block/bootdevice/by-name/dsp                       /vendor/dsp            ext4    ro,nosuid,nodev,barrier=1                            wait,slotselect
-/dev/block/bootdevice/by-name/bluetooth                 /vendor/bt_firmware    vfat    ro,shortname=lower,uid=1002,gid=3002,dmask=227,fmask=337,context=u:object_r:bt_firmware_file:s0 wait,slotselect
+# <mount_point>  <fstype>  <device>        <device2>                  <flags>
+/data             f2fs     /dev/block/bootdevice/by-name/userdata     flags=fileencryption=ice;wrappedkey
+/cache            ext4     /dev/block/bootdevice/by-name/cache        flags=backup=1;wipeingui;wipeduringfactoryreset
+/system           ext4     /dev/block/mapper/system                   flags=backup=0;logical
+#/system_image    emmc     /dev/block/mapper/system                   flags=backup=0;flashimg=0;logical
+/super            emmc     /dev/block/bootdevice/by-name/super        flags=display="super";backup=1;flashimg=1
+/boot             emmc     /dev/block/bootdevice/by-name/boot         flags=backup=1;flashimg=1
+/dtbo             emmc     /dev/block/bootdevice/by-name/dtbo         flags=display="dtbo";backup=1;flashimg=1
+/recovery         emmc     /dev/block/bootdevice/by-name/recovery     flags=backup=1;flashimg=1
+/vendor           ext4     /dev/block/mapper/vendor                   flags=display="vendor";logical
+#/vendor_image    emmc     /dev/block/mapper/vendor                   flags=display="vendor_image";logical
+/product          ext4     /dev/block/mapper/product                  flags=display="product";logical
+#/product_image   emmc     /dev/block/mapper/product                  flags=display="product_image";logical
+#/odm             ext4     /dev/block/mapper/odm                      flags=display="odm";logical
+#/odm_image       emmc     /dev/block/mapper/odm                      flags=display="odm_image";logical
+/firmware         vfat     /dev/block/bootdevice/by-name/modem        flags=display="Firmware"
+/firmware_image   emmc     /dev/block/bootdevice/by-name/modem        flags=display="Firmware";flashimg=1;backup=1
+/persist          ext4     /dev/block/bootdevice/by-name/persist      flags=display="Persist"
+/persist_image    emmc     /dev/block/bootdevice/by-name/persist      flags=display="Persist";flashimg=1;backup=1
+/bt_firmware      vfat     /dev/block/bootdevice/by-name/bluetooth    flags=display="bluetooth";backup=1
+/bt_firm_image    emmc     /dev/block/bootdevice/by-name/bluetooth    flags=display="bluetooth";flashimg=1
+/dsp              ext4     /dev/block/bootdevice/by-name/dsp          flags=display="dsp";backup=1
+/dsp_image        emmc     /dev/block/bootdevice/by-name/dsp          flags=display="dsp";flashimg=1
+/metadata         ext4     /dev/block/bootdevice/by-name/metadata     flags=display="metadata";backup=1;wrappedkey
+/metadata_image   emmc     /dev/block/bootdevice/by-name/metadata     flags=display="metadata";flashimg=1
+/cust             ext4     /dev/block/bootdevice/by-name/cust         flags=display="cust";backup=1
+/cust_image       emmc     /dev/block/bootdevice/by-name/cust         flags=display="cust";flashimg=1
+/splash           emmc     /dev/block/bootdevice/by-name/splash       flags=display="splash";backup=1;flashimg=1
+/tz               emmc     /dev/block/bootdevice/by-name/tz           flags=display="tz";backup=1;flashimg=1
+/vbmeta           emmc     /dev/block/bootdevice/by-name/vbmeta       flags=display="vbmeta";backup=1;flashimg=1
 
-# Removable storage
-/devices/platform/soc/8804000.sdhci/mmc_host*           /storage/sdcard1       vfat    nosuid,nodev                                         wait,voldmanaged=sdcard1:auto,encryptable=footer
-/devices/platform/soc/1da4000.ufshc_card/host*          /storage/sdcard1       vfat    nosuid,nodev                                         wait,voldmanaged=sdcard1:auto,encryptable=footer
-/devices/platform/soc/a600000.ssusb/a600000.dwc3/xhci-hcd.*.auto*    /storage/usbotg    vfat    nosuid,nodev    wait,voldmanaged=usbotg:auto
+/misc             emmc     /dev/block/bootdevice/by-name/misc
+/keystore         emmc     /dev/block/bootdevice/by-name/keystore
+/ssd              emmc     /dev/block/bootdevice/by-name/ssd
+/frp              emmc     /dev/block/bootdevice/by-name/frp
+/ddr              emmc     /dev/block/bootdevice/by-name/ddr
+/devinfo          emmc     /dev/block/bootdevice/by-name/devinfo
+/fsc              emmc     /dev/block/bootdevice/by-name/fsc
 
-# Need to have this entry in here even though the mount point itself is no longer needed.
-# The update_engine code looks for this entry in order to determine the boot device address
-# and fails if it does not find it.
-/dev/block/bootdevice/by-name/misc                      /misc                  emmc    defaults                                             defaults
-/dev/block/bootdevice/by-name/boot                      /boot                  emmc    defaults                                             defaults
-/dev/block/bootdevice/by-name/recovery                  /recovery              emmc    defaults                                             defaults
-/dev/block/bootdevice/by-name/op2                       /op2                   ext4    noatime,nosuid,nodev,barrier=1,data=ordered          wait,check
+/fsg              emmc     /dev/block/bootdevice/by-name/fsg          flags=display="fsg";backup=1
+/efs1             emmc     /dev/block/bootdevice/by-name/modemst1     flags=backup=1;display=EFS
+/efs2             emmc     /dev/block/bootdevice/by-name/modemst2     flags=backup=1;subpartitionof=/efs1
+
+/abl              emmc     /dev/block/bootdevice/by-name/abl          flags=display="abl";backup=1;flashimg=1
+/xbl              emmc     /dev/block/bootdevice/by-name/xbl          flags=display="xbl";backup=1;flashimg=1
+/apdp             emmc     /dev/block/bootdevice/by-name/apdp         flags=display="apdp";backup=1;flashimg=1
+/cmnlib64         emmc     /dev/block/bootdevice/by-name/cmnlib64     flags=display="cmnlib64";backup=1;flashimg=1
+/cmnlib           emmc     /dev/block/bootdevice/by-name/cmnlib       flags=display="cmnlib";backup=1;flashimg=1
+/keymaster        emmc     /dev/block/bootdevice/by-name/keymaster    flags=display="keymaster";backup=1;flashimg=1
+/hyp              emmc     /dev/block/bootdevice/by-name/hyp          flags=display="hyp";backup=1;flashimg=1
+/devcfg           emmc     /dev/block/bootdevice/by-name/devcfg       flags=display="devcfg";backup=1;flashimg=1
+
+/external_sd      vfat     /dev/block/mmcblk0p1  /dev/block/mmcblk0   flags=display="external_sd";storage;wipeingui;removable;fsflags="utf8"
+/usb-otg          vfat     /dev/block/sdg1       /dev/block/sdg       flags=display="usb-otg";storage;wipeingui;removable;fsflags="utf8"

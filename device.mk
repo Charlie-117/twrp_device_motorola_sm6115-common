@@ -1,8 +1,8 @@
 
-LOCAL_PATH := device/oneplus/instantnoodle
+LOCAL_PATH := device/motorola/sofiar
 
 # define hardware platform
-PRODUCT_PLATFORM := kona
+PRODUCT_PLATFORM := trinket
 
 #TEST
 # A/B support
@@ -26,8 +26,8 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl-wrapper.recovery \
     android.hardware.boot@1.0-impl-wrapper \
     android.hardware.boot@1.0-impl-recovery \
-    bootctrl.kona \
-    bootctrl.kona.recovery \
+    bootctrl.trinket \
+    bootctrl.trinket.recovery \
 
 PRODUCT_HOST_PACKAGES += \
     libandroidicu

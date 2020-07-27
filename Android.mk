@@ -25,7 +25,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),instantnoodle)
+ifeq ($(TARGET_DEVICE),sofiar)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 

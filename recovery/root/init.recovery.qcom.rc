@@ -29,11 +29,6 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
-    # this is for OnePlus 7 Pro 5g stock rom flashing
-    symlink /dev/block/bootdevice/by-name/mdm_oem_stanvbk /dev/block/bootdevice/by-name/mdm_oem_stanvbk_a
-    symlink /dev/block/bootdevice/by-name/mdm_oem_stanvbk /dev/block/bootdevice/by-name/mdm_oem_stanvbk_b
-    symlink /dev/block/bootdevice/by-name/spunvm /dev/block/bootdevice/by-name/spunvm_a
-    symlink /dev/block/bootdevice/by-name/spunvm /dev/block/bootdevice/by-name/spunvm_b
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
@@ -83,6 +78,13 @@ service keystore_auth /sbin/keystore_auth
     disabled
     seclabel u:r:recovery:s0
 
+service load_ts_firmware /sbin/load_ts_firmware.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
 # keystore is started and stopped on demand by TWRP
 service keystore /sbin/keystore /tmp/misc/keystore
     user root
@@ -114,20 +116,6 @@ service time_daemon /sbin/time_daemon
     disabled
     seclabel u:r:recovery:s0
 
-service patchfakepartitions-service /sbin/patchfakepartitions-service.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
-
-service unified-script /sbin/unified-script.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
-
 # This helps fix ld.config.txt errors from the linker on Android 8.1+
 service ldconfigtxt /sbin/touch /sbin/ld.config.txt
     oneshot
@@ -136,12 +124,6 @@ service ldconfigtxt /sbin/touch /sbin/ld.config.txt
 on boot
 	export LD_CONFIG_FILE /sbin/ld.config.txt
     setprop sys.usb.config adb
-    write /proc/touchpanel/gesture_enable 1
-    write /sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-02/c440000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb/otg_switch 1
-    chmod 0777 /sbin/patchfakepartitions-service.sh
-    chmod 0777 /sbin/unified-script.sh
-    start patchfakepartitions-service
-    start unified-script
 
 on init
     start logd
@@ -150,6 +132,7 @@ on init
     start prepdecrypt
     start time_daemon
     setprop crypto.ready 1
+    start load_ts_firmware
 
 on property:crypto.ready=0
     stop sbinqseecomd
@@ -165,6 +148,7 @@ on property:vendor.sys.listeners.registered=true
     start gatekeeper-1-0
     start servicemanager
     restart time_daemon
+    start load_ts_firmware
 
 on property:sys.usb.config=mtp,adb
     restart time_daemon
