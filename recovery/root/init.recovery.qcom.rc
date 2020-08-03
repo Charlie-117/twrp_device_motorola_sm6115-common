@@ -28,7 +28,6 @@
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
@@ -116,13 +115,7 @@ service time_daemon /sbin/time_daemon
     disabled
     seclabel u:r:recovery:s0
 
-# This helps fix ld.config.txt errors from the linker on Android 8.1+
-service ldconfigtxt /sbin/touch /sbin/ld.config.txt
-    oneshot
-    seclabel u:r:recovery:s0
-
 on boot
-	export LD_CONFIG_FILE /sbin/ld.config.txt
     setprop sys.usb.config adb
 
 on init
@@ -132,7 +125,6 @@ on init
     start prepdecrypt
     start time_daemon
     setprop crypto.ready 1
-    start load_ts_firmware
 
 on property:crypto.ready=0
     stop sbinqseecomd
