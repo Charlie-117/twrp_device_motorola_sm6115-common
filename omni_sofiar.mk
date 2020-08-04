@@ -16,7 +16,7 @@
 
 # Release name
 PRODUCT_RELEASE_NAME := sofiar
-
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
 
 # Inherit from our custom product configuration
