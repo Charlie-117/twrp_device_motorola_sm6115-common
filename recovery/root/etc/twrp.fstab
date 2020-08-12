@@ -18,4 +18,5 @@ product		/product		ext4			slotselect;display="Product";logical
 /efsg		emmc	/dev/block/bootdevice/by-name/fsg					flags=backup=1;subpartitionof=/efs1
 
 # Removable storage
+/external_sd    vfat    /dev/block/mmcblk1p1                                                    flags=removable;storage;display="SDCARD"
 /usbstorage      vfat    /dev/block/sdg1                            /dev/block/sdg     flags=fsflags=utf8;display="USB Storage";storage;wipeingui;removable
