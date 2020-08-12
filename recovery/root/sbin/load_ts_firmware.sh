@@ -5,6 +5,8 @@ module_path=/sbin/modules
 touch_class_path=/sys/class/touchscreen
 touch_path=
 firmware_path=/vendor/firmware
+firmware_file=
+device=$(getprop ro.boot.device)
 
 wait_for_poweron()
 {
@@ -45,15 +47,29 @@ insmod $module_path/focaltech_0flash_mmi.ko
 insmod $module_path/nova_0flash_mmi.ko
 
 cd $firmware_path
-for touch_product_string in $(ls $touch_class_path); do
-    touch_path=/sys$(cat $touch_class_path/$touch_product_string/path | awk -Fsofia '{print $1}')
-    firmware_file=$(ls *$touch_product_string*)
-    wait_for_poweron
-    echo $firmware_file > $touch_path/doreflash
-    echo 1 > $touch_path/forcereflash
-    sleep 5
-    echo 1 > $touch_path/reset
-done
+touch_product_string=$(ls $touch_class_path)
+case $touch_product_string in
+    ft8756)
+        case $device in
+            sofia)
+                firmware_file="focaltech-tianma-ft8756-0b-01-sofia.bin"
+                ;;
+            sofiar)
+                firmware_file="focaltech-ft8756-0d-01-sofiar.bin"
+                ;;
+        esac
+        ;;
+    *)
+        firmware_file="novatek_ts_fw.bin"
+        ;;
+esac
+
+touch_path=/sys$(cat $touch_class_path/$touch_product_string/path | awk -Fsofia '{print $1}')
+wait_for_poweron
+echo $firmware_file > $touch_path/doreflash
+echo 1 > $touch_path/forcereflash
+sleep 5
+echo 1 > $touch_path/reset
 
 return 0
 
