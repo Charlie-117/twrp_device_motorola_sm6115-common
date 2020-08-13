@@ -32,7 +32,6 @@ wait_for_poweron()
 
 # Load all needed modules
 insmod $module_path/sensors_class.ko
-insmod $module_path/aw8624.ko
 insmod $module_path/fpc1020_mmi.ko
 insmod $module_path/utags.ko
 insmod $module_path/exfat.ko
@@ -52,9 +51,11 @@ case $touch_product_string in
     ft8756)
         case $device in
             sofia)
+                insmod $module_path/aw8695.ko
                 firmware_file="focaltech-tianma-ft8756-0b-01-sofia.bin"
                 ;;
             sofiar)
+                insmod $module_path/aw8624.ko
                 firmware_file="focaltech-ft8756-0d-01-sofiar.bin"
                 ;;
         esac
