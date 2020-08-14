@@ -32,10 +32,9 @@ PRODUCT_BRAND := Motorola
 PRODUCT_MODEL := sofiar
 PRODUCT_MANUFACTURER := Motorola
 
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME="moto g power" \
-    BUILD_PRODUCT="moto g power" \
-    TARGET_DEVICE="moto g power"
+PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
+    ro.build.product \
+    ro.display.series
 
 # HACK: Set vendor patch level
 PRODUCT_PROPERTY_OVERRIDES += \

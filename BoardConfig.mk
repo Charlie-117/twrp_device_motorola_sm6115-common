@@ -30,7 +30,7 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo300
+TARGET_CPU_VARIANT := generic
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
@@ -106,8 +106,7 @@ TARGET_NO_KERNEL := false
 TARGET_NO_RECOVERY := false
 
 # Partitions (listed in the file) to be wiped under recovery.
-# TARGET_RECOVERY_WIPE := $(LOCAL_PATH)/recovery.wipe
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
+# TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
 
 # Workaround for error copying vendor files to recovery ramdisk
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -135,6 +134,10 @@ AB_OTA_PARTITIONS += \
 # needed since our qti_dynamic_partitions does not include
 # vendor and odm and we also dont want to AB update them
 TARGET_ENFORCE_AB_OTA_PARTITION_LIST := true
+
+# Init
+TARGET_INIT_VENDOR_LIB := //$(LOCAL_PATH):libinit_moto_trinket
+TARGET_RECOVERY_DEVICE_MODULES := libinit_moto_trinket
 
 # Encryption
 PLATFORM_SECURITY_PATCH := 2099-12-31
