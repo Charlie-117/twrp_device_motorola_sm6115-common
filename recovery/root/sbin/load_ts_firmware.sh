@@ -58,6 +58,11 @@ case $touch_product_string in
                 insmod $module_path/aw8624.ko
                 firmware_file="focaltech-ft8756-0d-01-sofiar.bin"
                 ;;
+            sofiap)
+                insmod $module_path/aw8695.ko
+                insmod $module_path/bu520xx_pen.ko
+                firmware_file="focaltech-ft8756-0d-01-sofiar.bin"
+                ;;
         esac
         ;;
     *)
