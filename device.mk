@@ -1,8 +1,8 @@
 
-LOCAL_PATH := device/motorola/sofiar
+LOCAL_PATH := device/motorola/liber
 
 # define hardware platform
-PRODUCT_PLATFORM := trinket
+PRODUCT_PLATFORM := sm6150
 
 #TEST
 # A/B support
@@ -26,8 +26,8 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl-wrapper.recovery \
     android.hardware.boot@1.0-impl-wrapper \
     android.hardware.boot@1.0-impl-recovery \
-    bootctrl.trinket \
-    bootctrl.trinket.recovery \
+    bootctrl.sm6150 \
+    bootctrl.sm6150.recovery \
 
 PRODUCT_HOST_PACKAGES += \
     libandroidicu

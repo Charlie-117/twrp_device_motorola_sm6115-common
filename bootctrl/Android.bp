@@ -19,7 +19,7 @@ soong_namespace {
 }
 
 cc_library {
-    name: "bootctrl.trinket",
+    name: "bootctrl.sm6150",
     defaults: ["bootctrl_hal_defaults"],
-    static_libs: ["libgptutils.sofiar"],
+    static_libs: ["libgptutils.liber"],
 }

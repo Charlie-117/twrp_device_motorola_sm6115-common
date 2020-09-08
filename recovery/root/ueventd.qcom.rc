@@ -128,6 +128,7 @@ firmware_directories /vendor/firmware_mnt/image/
 /dev/at_mdm0              0640   radio      radio
 /dev/video*               0660   system     camera
 /dev/cvp*                 0660   system     camera
+/dev/v4l2-hal-ctrl        0660   system     camera
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
 /dev/qseecom              0660   system     drmrpc
@@ -145,6 +146,7 @@ firmware_directories /vendor/firmware_mnt/image/
 /dev/sec_nvm_*            0660   system     system
 /dev/cryptoapp            0660   system     system
 /dev/spdaemon_ssr         0660   system     system
+/dev/spu_hal_ssr          0660   system     system
 /dev/iuicc                0660   system     system
 /dev/iuicc0               0660   system     system
 /dev/iuicc1               0660   system     system
@@ -177,6 +179,7 @@ firmware_directories /vendor/firmware_mnt/image/
 /sys/devices/soc/a000000.qcom,wcnss-wlan/net/wlan0/queues/rx-* rps_cpus           0660   system     system
 /sys/devices/soc/a000000.qcom,wcnss-wlan/net/p2p0/queues/rx-* rps_cpus            0660   system     system
 /dev/spidev0.0            0660   system     audio
+/dev/i2c-7                0660   system     audio
 /dev/msm_camera/*         0660   system     camera
 /dev/gemini/              0660   system     camera
 /dev/mercury0             0660   system     camera
@@ -282,6 +285,7 @@ firmware_directories /vendor/firmware_mnt/image/
 /sys/devices/virtual/input/input*                   enable_ps_sensor 0660  system   input
 /sys/devices/virtual/input/input*                   set_delay_ms     0660  system   input
 /sys/devices/virtual/input/input*                   do_flush         0660  system   input
+/dev/laser                0660   system     camera
 
 # vm_bms
 /dev/vm_bms               0660   system     system
@@ -406,8 +410,75 @@ firmware_directories /vendor/firmware_mnt/image/
 /sys/class/graphics/fb0     mode                     0664    system  graphics
 /sys/class/graphics/fb0     msm_cmd_autorefresh_en   0664    system  graphics
 
-#Egistec fingerprint
-/dev/esfp0            0660   system     system
+#JOT fixture devices for AMPS factory testing
+/dev/hidraw0              0660   root       vendor_tcmd
+/dev/hidraw1              0660   root       vendor_tcmd
+
+# MOD device
+/sys/devices/platform/soc/75b5000.i2c/i2c-7/7-0072 irq_enable 0660 vendor_tcmd vendor_tcmd
+/sys/devices/platform/soc/0.apba_ctrl apba_enable 0660 vendor_tcmd vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl apba_mode 0660 vendor_tcmd vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl flash_partition 0220 vendor_tcmd vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl unipro_mid 0440 root vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl unipro_pid 0440 root vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl vid 0440 root vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl pid 0440 root vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl fw_version 0440 root vendor_mod
+/sys/devices/platform/soc/0.apba_ctrl fw_version_str 0440 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0/mods_interfaces/* hotplug 0660 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0/mods_interfaces/* uevent 0660 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0/mods_interfaces/* current_limit 0220 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0/mods_interfaces/* rtc_sync 0220 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0 flashmode 0660 root vendor_mod
+/sys/devices/platform/soc/soc:muc_svc@0 reset 0660 root vendor_mod
+/sys/devices/platform/soc/0.muc/0.muc:muc_svc@0/mods_interfaces/* hotplug 0660 root vendor_mod
+/sys/devices/platform/soc/0.muc/0.muc:muc_svc@0/mods_interfaces/* uevent 0660 root vendor_mod
+/sys/devices/platform/soc/0.muc/0.muc:muc_svc@0 flashmode 0660 root vendor_mod
+/sys/devices/platform/mods_ap uevent 0660 root vendor_mod
+/sys/devices/platform/mods_ap/* uevent 0660 root vendor_mod
+/sys/devices/platform/mods_ap/greybus1 uevent 0664 root vendor_mod
+
+# MOD display device
+/sys/devices/platform/mods_ap/greybus1/*/*/display/display* state 0660 root vendor_mod
+/sys/devices/platform/mods_ap/greybus1/*/*/display/display* config 0444 root vendor_mod
+/sys/devices/platform/mods_ap/greybus1/*/*/display/display* notification 0660 root vendor_mod
+
+# MOD light device
+/sys/devices/platform/mods_ap/greybus1/*/*/leds/mod_light*::backlight brightness 0660 root vendor_mod
+
+# IIO (dynamic sensors)
+/sys/devices/iio_sysfs_trigger/add_trigger          0220    system      system
+/sys/devices/iio_sysfs_trigger/remove_trigger       0220    system      system
+
+/sys/devices/iio:device* buffer/*                   0664    system      system
+/sys/devices/iio:device* scan_elements/in_*_en      0664    system      system
+/sys/devices/iio:device* trigger/current_trigger    0664    system      system
+/sys/devices/iio:device* in_sampling_frequency      0664    system      system
+/sys/devices/iio:device* max_latency_ns             0664    system      system
+/sys/devices/iio:device* flush                      0220    system      system
+
+/dev/iio:device*                                    0600    system      system
+
+# RAW device
+/dev/gbraw*             0660   root   vendor_mod
+/dev/gbsys              0660   root   vendor_mod
+
+# Audio device
+/sys/devices/platform/mods_codec.0 uevent 0660 root vendor_mod
+/sys/devices/platform/mods_codec.0/* uevent 0660 root vendor_mod
+
+# MOD camera device
+/dev/mot_camera_ext*               0660   system     camera
+/sys/devices/virtual/video4linux/mot_camera_ext* open_mode 0660 system camera
+/sys/devices/virtual/video4linux/mot_camera_ext* uevent 0660 root vendor_mod
+/sys/devices/virtual/video4linux/video* open_mode 0660 system camera
+/sys/devices/virtual/video4linux/video* uevent 0660 root vendor_mod
+
+# Egis FPS
+/dev/esfp0          0660    system  system
+
+# Goodix FPS
+/dev/goodix_fp      0664    system  system
 
 # Change permission for fingerprint sensor
 /sys/class/fingerprint/fpc1020 nav        0440     system    system
@@ -415,7 +486,3 @@ firmware_directories /vendor/firmware_mnt/image/
 /sys/class/fingerprint/fpc1020 irq_cnt    0440     system    system
 /sys/class/fingerprint/fpc1020 dev_enable 0220     system    system
 /sys/class/fingerprint/fpc1020 vendor     0444     system    system
-
-#Laser device
-/dev/laser            0660   system     camera
-

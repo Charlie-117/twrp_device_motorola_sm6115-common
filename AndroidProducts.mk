@@ -15,9 +15,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_sofiar.mk
+    $(LOCAL_DIR)/omni_liber.mk
 
 COMMON_LUNCH_CHOICES := \
-    omni_sofiar-user \
-    omni_sofiar-userdebug \
-    omni_sofiar-eng
+    omni_liber-user \
+    omni_liber-userdebug \
+    omni_liber-eng
