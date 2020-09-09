@@ -36,7 +36,4 @@ PRODUCT_HOST_PACKAGES += \
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/recovery.img-dtb:dtb.img
-
 #PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
