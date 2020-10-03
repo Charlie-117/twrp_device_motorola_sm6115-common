@@ -37,21 +37,13 @@ on fs
 on early-fs
     start vold
 
-# Separate copy needed to use /sbin/linker64 instead of /system/bin/linker64
 service sbinqseecomd /sbin/qseecomd
     user root
     group root
     disabled
     seclabel u:r:recovery:s0
 
-service prepdecrypt /sbin/prepdecrypt.sh
-    oneshot
-    disabled
-    user root
-    group root
-    seclabel u:r:recovery:s0
-
-service hwservicemanager /sbin/hwservicemanager
+service hwservicemanager /system/bin/hwservicemanager
     user root
     group root
     disabled
@@ -64,13 +56,13 @@ service boot-1-0 /sbin/android.hardware.boot@1.0-service
     disabled
     seclabel u:r:recovery:s0
 
-service servicemanager /sbin/servicemanager
+service servicemanager /system/bin/servicemanager
     user root
     group root readproc
     disabled
     seclabel u:r:recovery:s0
 
-service keystore_auth /sbin/keystore_auth
+service keystore_auth /system/bin/keystore_auth
     oneshot
     user system
     group root
@@ -85,7 +77,7 @@ service load_ts_firmware /sbin/load_ts_firmware.sh
     seclabel u:r:recovery:s0
 
 # keystore is started and stopped on demand by TWRP
-service keystore /sbin/keystore /tmp/misc/keystore
+service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc
     disabled
