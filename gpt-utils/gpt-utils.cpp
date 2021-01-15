@@ -38,19 +38,20 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
-#include <scsi/ufs/ioctl.h>
-#include <scsi/ufs/ufs.h>
+#include "ioctl.h"
+#include "ufs.h"
 #include <unistd.h>
 #include <linux/fs.h>
 #include <limits.h>
 #include <dirent.h>
 #include <inttypes.h>
 #include <linux/kernel.h>
+#include <asm/byteorder.h>
 #include <map>
 #include <vector>
 #include <string>
 #define LOG_TAG "gpt-utils"
-#include <log/log.h>
+#include <cutils/log.h>
 #include <cutils/properties.h>
 #include "gpt-utils.h"
 #include <endian.h>
@@ -1530,7 +1531,6 @@ int gpt_disk_commit(struct gpt_disk *disk)
                                 __func__);
                 goto error;
         }
-        fsync(fd);
         close(fd);
         return 0;
 error:
