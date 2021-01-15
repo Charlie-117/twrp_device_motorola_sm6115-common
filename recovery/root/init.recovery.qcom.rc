@@ -25,114 +25,21 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import /init.recovery.qcom_decrypt.rc
+
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    chmod 0660 /dev/qseecom
-    chown system drmrpc /dev/qseecom
-    chmod 0664 /dev/ion
-    chown system system /dev/ion
-    install_keyring
+    export LD_LIBRARY_PATH /sbin:/vendor/lib64:/vendor/lib64/hw
+    start load_modules
 
-on early-fs
-    start vold
+on property:ro.crypto.type=file
+    setprop ro.crypto.state encrypted
+    setprop twrp.apex.loaded true
 
-service sbinqseecomd /sbin/qseecomd
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service hwservicemanager /system/bin/hwservicemanager
-    user root
-    group root
-    disabled
-    onrestart setprop hwservicemanager.ready false
-    seclabel u:r:recovery:s0
-
-service boot-1-0 /sbin/android.hardware.boot@1.0-service
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service servicemanager /system/bin/servicemanager
-    user root
-    group root readproc
-    disabled
-    seclabel u:r:recovery:s0
-
-service keystore_auth /system/bin/keystore_auth
+service load_ts_firmware /system/bin/load_ts_firmware.sh
     oneshot
-    user system
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service load_ts_firmware /sbin/load_ts_firmware.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
-
-# keystore is started and stopped on demand by TWRP
-service keystore /system/bin/keystore /tmp/misc/keystore
-    user root
-    group root drmrpc readproc
-    disabled
-    seclabel u:r:recovery:s0
-
-service gatekeeper-1-0 /sbin/android.hardware.gatekeeper@1.0-service-qti
     user root
     group root
     disabled
     seclabel u:r:recovery:s0
-
-service keymaster-4-0 /sbin/android.hardware.keymaster@4.0-service-qti
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service logd /sbin/logd
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service time_daemon /sbin/time_daemon
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-on boot
-    setprop sys.usb.config adb
-
-on init
-    start logd
-    start hwservicemanager
-    start boot-1-0
-    start prepdecrypt
-    start time_daemon
-    setprop crypto.ready 1
-
-on property:crypto.ready=0
-    stop sbinqseecomd
-    stop keymaster-4-0
-    stop gatekeeper-1-0
-    stop servicemanager
-
-on property:crypto.ready=1
-    start sbinqseecomd
-
-on property:vendor.sys.listeners.registered=true
-    start keymaster-4-0
-    start gatekeeper-1-0
-    start servicemanager
-    restart time_daemon
-    start load_ts_firmware
-
-on property:sys.usb.config=mtp,adb
-    restart time_daemon
