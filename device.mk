@@ -71,6 +71,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_HOST_PACKAGES += \
     libandroidicu
 
+# Dynamic partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # qcom standard decryption
 PRODUCT_PACKAGES += \
     qcom_decrypt \
