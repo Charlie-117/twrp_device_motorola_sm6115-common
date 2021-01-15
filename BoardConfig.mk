@@ -69,7 +69,6 @@ BOARD_KERNEL_CMDLINE := \
     service_locator.enable=1 \
     swiotlb=1 \
     earlycon=msm_geni_serial,0x4a90000 \
-    loop.max_part=7 \
     cgroup.memory=nokmem,nosocket \
     androidboot.usbcontroller=4e00000.dwc3 \
     printk.devkmsg=on \
