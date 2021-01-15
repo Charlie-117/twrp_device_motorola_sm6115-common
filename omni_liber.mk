@@ -24,7 +24,7 @@ $(call inherit-product, vendor/omni/config/common.mk)
 PRODUCT_DEVICE := liber
 PRODUCT_NAME := omni_$(PRODUCT_DEVICE)
 PRODUCT_BRAND := motorola
-PRODUCT_MODEL := liber
+PRODUCT_MODEL := motorola one fusion+
 PRODUCT_MANUFACTURER := motorola
 
 # Inherit from hardware-specific part of the product configuration
