@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-module_path=/sbin/modules
+module_path=/vendor/lib/modules
 
 touch_class_path=/sys/class/touchscreen
 touch_path=
