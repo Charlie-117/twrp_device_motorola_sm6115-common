@@ -20,7 +20,7 @@ Front Camera | 16 MP (f/2.0)
 
 ### Kernel Source
 
-Check here: https://github.com/ixmoe/android_kernel_motorola_sm6150-def
+Check here: https://github.com/Hasaber8/kernel_motorola_sm6150/commits/twrp-10
 
 ### How to compile
 
