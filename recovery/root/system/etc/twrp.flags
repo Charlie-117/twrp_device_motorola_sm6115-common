@@ -26,8 +26,8 @@
 /keymaster       emmc       /dev/block/bootdevice/by-name/keymaster               flags=slotselect
 
 # Removable storage
-/external_sd     auto       /dev/block/mmcblk0p1    /dev/block/mmcblk0            flags=display="Micro SDcard";storage;wipeingui;removable
-/usb-otg         auto       /dev/block/sdg1         /dev/block/sdg                flags=display="USB OTG";storage;wipeingui;removable
+/external_sd     auto       /dev/block/mmcblk1p1    /dev/block/mmcblk1            flags=display="Micro SDcard";storage;wipeingui;removable
+/usb_otg         auto       /dev/block/sdg1         /dev/block/sdg                flags=display="USB OTG";storage;wipeingui;removable
 
 # Dyanmic Partitions
 system           ext4       /system                                               display="System"
